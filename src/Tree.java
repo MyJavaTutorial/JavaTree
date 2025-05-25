@@ -6,7 +6,7 @@ public class Tree<T extends Comparable<T>> {
         this.root = null;
     }
 
-    public void addIterative( T v ) {
+    public void iterativeAdd( T v ) {
         Node<T> n = new Node<>(v);
         if (root==null) { root = n; return; }
         Node<T> tmp = root;
@@ -21,19 +21,18 @@ public class Tree<T extends Comparable<T>> {
         }
     }
 
-    public void addRecursive( T v ) { addRecursive(root, v); }
-
-    private void addRecursive( Node<T> nStart, T value ) {
-        Node<T> n = new Node<>(value);
-        if (root==null) { root = n; return; }
-        if ( value.compareTo(nStart.getValue() ) >=0 ) {
-            if (nStart.getRight()==null) { nStart.setRight(n); return; }
-            else addRecursive( nStart.getRight(), value );
+    private void recursiveAdd( T v, Node<T> start ) {
+        if (root==null) { root = new Node<>(v); return; }
+        if ( v.compareTo(start.getValue()) >= 0 ) {
+            if (start.getRight()==null) { start.setRight(new Node<>(v)); return; }
+            else recursiveAdd( v, start.getRight() );
         } else {
-            if (nStart.getLeft()==null) { nStart.setLeft(n); return; }
-            else addRecursive( nStart.getLeft(), value );
+            if (start.getLeft()==null) { start.setLeft(new Node<>(v)); return; }
+            else recursiveAdd( v, start.getLeft() );
         }
     }
+
+    public void add( T v ) { recursiveAdd(v, root); }
 
     private void visita( Node<T> n, StringBuffer s ) {
         if (n==null) return;
@@ -42,12 +41,30 @@ public class Tree<T extends Comparable<T>> {
         if (n.getRight()!=null) visita(n.getRight(), s);
     }
 
-    
-    @Override
+      @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
         visita( root, sb );
         return sb.toString();
+    }
+
+    public void print() { printTree(root, 0); }
+
+    private void printTree(Node<T> node, int level) {
+        if (node == null) return;
+        // Stampa l'indentazione in base al livello
+        for (int i = 0; i < level; i++) {
+            System.out.print(" - "); // spazia ogni livello
+        }
+        System.out.println(node.getValue()); // Stampa il valore del nodo
+
+        // Stampa ricorsivamente i figli
+        if (node.getLeft() != null) {
+            printTree(node.getLeft(), level + 1);
+        }
+        if (node.getRight() != null) {
+            printTree(node.getRight(), level + 1);
+        }
     }
 
     

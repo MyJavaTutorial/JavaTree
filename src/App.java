@@ -14,10 +14,12 @@ public class App {
        try (Scanner scan = new Scanner(file)) {
               while (scan.hasNextLine()) {
                   String line = scan.nextLine();
-                  tree.addRecursive(line);
+                  tree.add(line);
               }
        }
        System.out.println(tree);
+
+       tree.print();
 
 
     }
